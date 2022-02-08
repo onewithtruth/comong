@@ -3,6 +3,7 @@ import { ItemsService } from './items.service';
 import { CreateItemDto } from './dto/create-item.dto';
 import { UpdateItemDto } from './dto/update-item.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { category } from './entities/category.entity';
 
 @Controller('items')
 @ApiTags('items')
@@ -19,6 +20,11 @@ export class ItemsController {
     return this.itemsService.findAll();
   }
 
+  @Get('categorylist')
+  getCategoryList(): Promise<category[]> {
+    return this.itemsService.getCategoryList();
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.itemsService.findOne(+id);
@@ -33,4 +39,5 @@ export class ItemsController {
   remove(@Param('id') id: string) {
     return this.itemsService.remove(+id);
   }
+
 }
