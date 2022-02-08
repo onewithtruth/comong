@@ -19,12 +19,12 @@ async function bootstrap() {
     transform: true,
   };
   if (
-    fs.existsSync('./secrets/key.pem') &&
-    fs.existsSync('./secrets/cert.pem')
+    fs.existsSync('./secrets/comong.key.pem') &&
+    fs.existsSync('./secrets/comong.crt.pem')
   ) {
     const httpsOptions = {
-      key: fs.readFileSync('./secrets/key.pem', 'utf8'),
-      cert: fs.readFileSync('./secrets/cert.pem', 'utf8'),
+      key: fs.readFileSync('./secrets/comong.key.pem', 'utf8'),
+      cert: fs.readFileSync('./secrets/comong.crt.pem', 'utf8'),
     };
     const app = await NestFactory.create(AppModule, {
       httpsOptions,
