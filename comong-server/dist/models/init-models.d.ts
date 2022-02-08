@@ -1,0 +1,26 @@
+import type { Sequelize } from 'sequelize';
+import { categories as _categories } from './categories';
+import type { categoriesAttributes, categoriesCreationAttributes } from './categories';
+import { chat as _chat } from './chat';
+import type { chatAttributes, chatCreationAttributes } from './chat';
+import { post as _post } from './post';
+import type { postAttributes, postCreationAttributes } from './post';
+import { post_has_categories as _post_has_categories } from './post_has_categories';
+import type { post_has_categoriesAttributes, post_has_categoriesCreationAttributes } from './post_has_categories';
+import { post_has_chat as _post_has_chat } from './post_has_chat';
+import type { post_has_chatAttributes, post_has_chatCreationAttributes } from './post_has_chat';
+import { refreshtoken as _refreshtoken } from './refreshtoken';
+import type { refreshtokenAttributes, refreshtokenCreationAttributes } from './refreshtoken';
+import { user as _user } from './user';
+import type { userAttributes, userCreationAttributes } from './user';
+export { _categories as categories, _chat as chat, _post as post, _post_has_categories as post_has_categories, _post_has_chat as post_has_chat, _refreshtoken as refreshtoken, _user as user, };
+export type { categoriesAttributes, categoriesCreationAttributes, chatAttributes, chatCreationAttributes, postAttributes, postCreationAttributes, post_has_categoriesAttributes, post_has_categoriesCreationAttributes, post_has_chatAttributes, post_has_chatCreationAttributes, refreshtokenAttributes, refreshtokenCreationAttributes, userAttributes, userCreationAttributes, };
+export declare function initModels(sequelize: Sequelize): {
+    categories: typeof _categories;
+    chat: typeof _chat;
+    post: typeof _post;
+    post_has_categories: typeof _post_has_categories;
+    post_has_chat: typeof _post_has_chat;
+    refreshtoken: typeof _refreshtoken;
+    user: typeof _user;
+};
