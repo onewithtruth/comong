@@ -1,4 +1,5 @@
-require('dotenv').config();
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 import { initModels } from './init-models';
 import { Sequelize } from 'sequelize';
@@ -17,8 +18,6 @@ const sequelize = new Sequelize(
     dialect: 'mysql',
   },
 );
-
-console.log(sequelize);
 
 const models = initModels(sequelize);
 

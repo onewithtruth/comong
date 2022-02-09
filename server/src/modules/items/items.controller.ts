@@ -2,6 +2,8 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { ItemsService } from './items.service';
 import { CreateItemDto } from './dto/create-item.dto';
 import { UpdateItemDto } from './dto/update-item.dto';
+import { ApiTags } from '@nestjs/swagger';
+import { category } from './entities/category.entity';
 import { ApiTags, ApiOperation, ApiCreatedResponse } from '@nestjs/swagger';
 
 @Controller('items')
@@ -22,6 +24,11 @@ export class ItemsController {
     return this.itemsService.findAll();
   }
 
+  @Get('categorylist')
+  getCategoryList(): Promise<category[]> {
+    return this.itemsService.getCategoryList();
+  }
+
   @Get(':id')
   @ApiOperation({ summary: '상품 상세 정보', description: '회원 가입 요청을 받습니다.' })
   findOne(@Param('id') id: string) {
@@ -39,4 +46,5 @@ export class ItemsController {
   remove(@Param('id') id: string) {
     return this.itemsService.remove(+id);
   }
+
 }
