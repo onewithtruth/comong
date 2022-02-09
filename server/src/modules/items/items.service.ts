@@ -32,7 +32,7 @@ export class ItemsService {
     let categoryLists = await models.category.findAll({
       attributes: ['id', 'pid', 'depth', 'category'],
     });
-    this.categoryLists = categoryLists.map((elem) => {
+    this.categoryLists = categoryLists.map((elem: { dataValues: object }) => {
       return elem.dataValues;
     });
     return this.categoryLists;

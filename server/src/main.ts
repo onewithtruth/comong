@@ -1,10 +1,11 @@
-require('dotenv').config();
-
+import * as dotenv from 'dotenv';
 import * as fs from 'fs';
+import * as cookieParser from 'cookie-parser';
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { setupSwagger } from 'src/util/swagger';
+dotenv.config();
 
 async function bootstrap() {
   const corsOptions = {
@@ -31,6 +32,7 @@ async function bootstrap() {
     });
     app.useGlobalPipes(new ValidationPipe(validationPipeOptions));
     app.enableCors(corsOptions);
+    app.use(cookieParser());
     setupSwagger(app);
     await app.listen(443);
     console.log(`https server runnning on port 443`);
@@ -38,6 +40,7 @@ async function bootstrap() {
     const app = await NestFactory.create(AppModule, {});
     app.useGlobalPipes(new ValidationPipe(validationPipeOptions));
     app.enableCors(corsOptions);
+    app.use(cookieParser());
     setupSwagger(app);
     await app.listen(80);
     console.log(`http server runnning on port 80`);
