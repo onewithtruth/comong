@@ -2,7 +2,6 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { ItemsService } from './items.service';
 import { CreateItemDto } from './dto/create-item.dto';
 import { UpdateItemDto } from './dto/update-item.dto';
-import { ApiTags } from '@nestjs/swagger';
 import { category } from './entities/category.entity';
 import { ApiTags, ApiOperation, ApiCreatedResponse } from '@nestjs/swagger';
 
