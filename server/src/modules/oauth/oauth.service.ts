@@ -5,7 +5,6 @@ import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { tokenMakerOutput } from './entities/tokenMakerOutput.entity';
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { JwtService } from '@nestjs/jwt';
-import { ConnectableObservable } from 'rxjs';
 const models = require('../../models/index');
 
 @Injectable()
