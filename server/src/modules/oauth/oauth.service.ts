@@ -1,14 +1,11 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
 
-import {
-  Injectable,
-  HttpException,
-  HttpStatus,
-} from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { tokenMakerOutput } from './entities/tokenMakerOutput.entity';
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { JwtService } from '@nestjs/jwt';
+import { ConnectableObservable } from 'rxjs';
 const models = require('../../models/index');
 
 @Injectable()
@@ -17,7 +14,7 @@ export class OauthService {
   private tokenMakerOutput: tokenMakerOutput;
 
   async googleOauthlogin(url: string, res: any): Promise<any> {
-    console.log(url);
+    // console.log(url);
 
     const accessTokenOptions: AxiosRequestConfig = {
       method: 'POST',
@@ -65,8 +62,111 @@ export class OauthService {
     }
   }
 
-  async tokenMaker(user: any, res: any)
-  {
+  async kakaoOauthlogin(url: string, res: any): Promise<any> {
+    // console.log(url);
+
+    const accessTokenOptions: AxiosRequestConfig = {
+      method: 'POST',
+      url: url,
+    };
+    const response: AxiosResponse = await axios(accessTokenOptions).catch(
+      (err) => null,
+    );
+
+    if (!response) {
+      const HttpExcep = new HttpException(
+        'something wrong with authorizationCode',
+        HttpStatus.NON_AUTHORITATIVE_INFORMATION,
+      );
+      res.send(HttpExcep);
+    } else {
+      const accessToken = response.data.access_token;
+      const userInfoOptions: AxiosRequestConfig = {
+        method: 'GET',
+        url: 'https://kapi.kakao.com/v2/user/me',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      };
+      const kakaoDataResponse: AxiosResponse = await axios(userInfoOptions);
+      let email = kakaoDataResponse.data.kakao_account.email;
+      console.log(email);
+      const existingUser = await models.user.findOne({
+        where: {
+          email: email,
+        },
+      });
+
+      if (!existingUser) {
+        function getNickname(str) {
+          let aIndex = str.indexOf('@');
+          return str.slice(0, aIndex);
+        }
+        let nickname = getNickname(email);
+        const newUser = await models.user.create({
+          email: email,
+          nickname: nickname,
+        });
+        await this.tokenMaker(newUser, res);
+      } else {
+        await this.tokenMaker(existingUser, res);
+      }
+    }
+  }
+
+  async naverOauthlogin(url: string, res: any): Promise<any> {
+    // console.log(url);
+
+    const accessTokenOptions: AxiosRequestConfig = {
+      method: 'POST',
+      url: url,
+    };
+    const response: AxiosResponse = await axios(accessTokenOptions).catch(
+      (err) => null,
+    );
+    if (response.data.error === 'invalid_request') {
+      const HttpExcep = new HttpException(
+        'something wrong with authorizationCode',
+        HttpStatus.NON_AUTHORITATIVE_INFORMATION,
+      );
+      res.send(HttpExcep);
+    } else {
+      const accessToken = response.data.access_token;
+      const userInfoOptions: AxiosRequestConfig = {
+        method: 'GET',
+        url: 'https://openapi.naver.com/v1/nid/me',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      };
+      const naverDataResponse: AxiosResponse = await axios(userInfoOptions);
+      console.log(naverDataResponse);
+      let email = naverDataResponse.data.response.email;
+      console.log(email);
+      const existingUser = await models.user.findOne({
+        where: {
+          email: email,
+        },
+      });
+
+      if (!existingUser) {
+        function getNickname(str) {
+          let aIndex = str.indexOf('@');
+          return str.slice(0, aIndex);
+        }
+        let nickname = getNickname(email);
+        const newUser = await models.user.create({
+          email: email,
+          nickname: nickname,
+        });
+        await this.tokenMaker(newUser, res);
+      } else {
+        await this.tokenMaker(existingUser, res);
+      }
+    }
+  }
+
+  async tokenMaker(user: any, res: any) {
     const payload = {
       id: user.dataValues.id,
       nickname: user.dataValues.nickname,
@@ -94,6 +194,7 @@ export class OauthService {
         refreshtoken: refreshToken,
         user_id: user.dataValues.id,
       });
+      console.log(newRefreshToken);
     } else {
       const updatedRefreshToken = await models.refreshtoken.update(
         {
@@ -105,15 +206,19 @@ export class OauthService {
           },
         },
       );
-      const oauthResponese = { data: newResponse, message: 'ok' };
-      const output: tokenMakerOutput = { newResponse: oauthResponese, refreshToken: refreshToken };
+    };
 
-      res.cookie('refreshToken', output.refreshToken, {
-        httpOnly: true,
-        secure: true,
-        sameSite: 'none',
-      });
-      res.send(output.newResponse);
-    }
+    const oauthResponese = { data: newResponse, message: 'ok' };
+    const output: tokenMakerOutput = {
+      newResponse: oauthResponese,
+      refreshToken: refreshToken,
+    };
+
+    res.cookie('refreshToken', output.refreshToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+    });
+    res.send(output.newResponse);
   }
 }
