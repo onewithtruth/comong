@@ -1,6 +1,7 @@
 import * as Sequelize from 'sequelize';
 import { DataTypes, Model, Optional } from 'sequelize';
 import type { chat_has_item, chat_has_itemId } from './chat_has_item';
+import type { chat_has_user, chat_has_userId } from './chat_has_user';
 import type { item, itemId } from './item';
 import type { user, userId } from './user';
 
@@ -10,7 +11,6 @@ export interface chatAttributes {
   createdAt?: Date;
   updatedAt?: Date;
   room?: string;
-  user_id: number;
 }
 
 export type chatPk = "id";
@@ -24,7 +24,6 @@ export class chat extends Model<chatAttributes, chatCreationAttributes> implemen
   createdAt?: Date;
   updatedAt?: Date;
   room?: string;
-  user_id!: number;
 
   // chat hasMany chat_has_item via chat_id
   chat_has_items!: chat_has_item[];
@@ -38,6 +37,18 @@ export class chat extends Model<chatAttributes, chatCreationAttributes> implemen
   hasChat_has_item!: Sequelize.HasManyHasAssociationMixin<chat_has_item, chat_has_itemId>;
   hasChat_has_items!: Sequelize.HasManyHasAssociationsMixin<chat_has_item, chat_has_itemId>;
   countChat_has_items!: Sequelize.HasManyCountAssociationsMixin;
+  // chat hasMany chat_has_user via chat_id
+  chat_has_users!: chat_has_user[];
+  getChat_has_users!: Sequelize.HasManyGetAssociationsMixin<chat_has_user>;
+  setChat_has_users!: Sequelize.HasManySetAssociationsMixin<chat_has_user, chat_has_userId>;
+  addChat_has_user!: Sequelize.HasManyAddAssociationMixin<chat_has_user, chat_has_userId>;
+  addChat_has_users!: Sequelize.HasManyAddAssociationsMixin<chat_has_user, chat_has_userId>;
+  createChat_has_user!: Sequelize.HasManyCreateAssociationMixin<chat_has_user>;
+  removeChat_has_user!: Sequelize.HasManyRemoveAssociationMixin<chat_has_user, chat_has_userId>;
+  removeChat_has_users!: Sequelize.HasManyRemoveAssociationsMixin<chat_has_user, chat_has_userId>;
+  hasChat_has_user!: Sequelize.HasManyHasAssociationMixin<chat_has_user, chat_has_userId>;
+  hasChat_has_users!: Sequelize.HasManyHasAssociationsMixin<chat_has_user, chat_has_userId>;
+  countChat_has_users!: Sequelize.HasManyCountAssociationsMixin;
   // chat belongsToMany item via chat_id and item_id
   item_id_items!: item[];
   getItem_id_items!: Sequelize.BelongsToManyGetAssociationsMixin<item>;
@@ -50,11 +61,18 @@ export class chat extends Model<chatAttributes, chatCreationAttributes> implemen
   hasItem_id_item!: Sequelize.BelongsToManyHasAssociationMixin<item, itemId>;
   hasItem_id_items!: Sequelize.BelongsToManyHasAssociationsMixin<item, itemId>;
   countItem_id_items!: Sequelize.BelongsToManyCountAssociationsMixin;
-  // chat belongsTo user via user_id
-  user!: user;
-  getUser!: Sequelize.BelongsToGetAssociationMixin<user>;
-  setUser!: Sequelize.BelongsToSetAssociationMixin<user, userId>;
-  createUser!: Sequelize.BelongsToCreateAssociationMixin<user>;
+  // chat belongsToMany user via chat_id and user_id
+  user_id_users!: user[];
+  getUser_id_users!: Sequelize.BelongsToManyGetAssociationsMixin<user>;
+  setUser_id_users!: Sequelize.BelongsToManySetAssociationsMixin<user, userId>;
+  addUser_id_user!: Sequelize.BelongsToManyAddAssociationMixin<user, userId>;
+  addUser_id_users!: Sequelize.BelongsToManyAddAssociationsMixin<user, userId>;
+  createUser_id_user!: Sequelize.BelongsToManyCreateAssociationMixin<user>;
+  removeUser_id_user!: Sequelize.BelongsToManyRemoveAssociationMixin<user, userId>;
+  removeUser_id_users!: Sequelize.BelongsToManyRemoveAssociationsMixin<user, userId>;
+  hasUser_id_user!: Sequelize.BelongsToManyHasAssociationMixin<user, userId>;
+  hasUser_id_users!: Sequelize.BelongsToManyHasAssociationsMixin<user, userId>;
+  countUser_id_users!: Sequelize.BelongsToManyCountAssociationsMixin;
 
   static initModel(sequelize: Sequelize.Sequelize): typeof chat {
     return chat.init({
@@ -71,14 +89,6 @@ export class chat extends Model<chatAttributes, chatCreationAttributes> implemen
     room: {
       type: DataTypes.STRING(45),
       allowNull: true
-    },
-    user_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'user',
-        key: 'id'
-      }
     }
   }, {
     sequelize,
@@ -91,13 +101,6 @@ export class chat extends Model<chatAttributes, chatCreationAttributes> implemen
         using: "BTREE",
         fields: [
           { name: "id" },
-        ]
-      },
-      {
-        name: "fk_chat_user1_idx",
-        using: "BTREE",
-        fields: [
-          { name: "user_id" },
         ]
       },
     ]
