@@ -1,5 +1,5 @@
 #!/bin/bash
-cd /home/ubuntu/cokkirimarketserver/server
+cd /home/ubuntu/comong-server/server/dist
 
 export COMONG_ACCESS_SECRET=$(aws ssm get-parameters --region ap-northeast-2 --names COMONG_ACCESS_SECRET --query Parameters[0].Value | sed 's/"//g')
 export COMONG_REFRESH_SECRET=$(aws ssm get-parameters --region ap-northeast-2 --names COMONG_REFRESH_SECRET --query Parameters[0].Value | sed 's/"//g')
@@ -19,4 +19,4 @@ export COMONG_NAVER_CLIENT_ID=$(aws ssm get-parameters --region ap-northeast-2 -
 export COMONG_NAVER_CLIENT_SECRET=$(aws ssm get-parameters --region ap-northeast-2 --names COMONG_NAVER_REDIRECT_URL --query Parameters[0].Value | sed 's/"//g')
 export COMONG_NAVER_REDIRECT_URL=$(aws ssm get-parameters --region ap-northeast-2 --names COMONG_NAVER_REDIRECT_URL --query Parameters[0].Value | sed 's/"//g')
 
-authbind --deep pm2 start app.js
+authbind --deep pm2 start main.js
