@@ -1,5 +1,5 @@
 #!/bin/bash
-cd /home/ubuntu/comong-server/server
+cd /home/ubuntu/comong/server
 
 export COMONG_ACCESS_SECRET=$(aws ssm get-parameters --region ap-northeast-2 --names COMONG_ACCESS_SECRET --query Parameters[0].Value | sed 's/"//g')
 export COMONG_REFRESH_SECRET=$(aws ssm get-parameters --region ap-northeast-2 --names COMONG_REFRESH_SECRET --query Parameters[0].Value | sed 's/"//g')
