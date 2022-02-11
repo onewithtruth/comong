@@ -173,7 +173,7 @@ export class OauthService {
     };
     const accessToken = this.jwtService.sign(payload);
     const refreshToken = this.jwtService.sign(payload, {
-      secret: process.env.REFRESH_SECRET,
+      secret: process.env.COMONG_REFRESH_SECRET,
       expiresIn: '15d',
     });
     const newResponse = {
