@@ -6,7 +6,7 @@ import type { item, itemId } from './item';
 import type { order, orderId } from './order';
 import type { order_has_user, order_has_userId } from './order_has_user';
 import type { refreshtoken, refreshtokenId } from './refreshtoken';
-import type { shopping cart, shopping cartId } from './shopping cart';
+import type { shopping_cart, shopping_cartId } from './shopping_cart';
 import type { user_address, user_addressId } from './user_address';
 import type { user_payment, user_paymentId } from './user_payment';
 
@@ -112,18 +112,18 @@ export class user extends Model<userAttributes, userCreationAttributes> implemen
   hasRefreshtoken!: Sequelize.HasManyHasAssociationMixin<refreshtoken, refreshtokenId>;
   hasRefreshtokens!: Sequelize.HasManyHasAssociationsMixin<refreshtoken, refreshtokenId>;
   countRefreshtokens!: Sequelize.HasManyCountAssociationsMixin;
-  // user hasMany shopping cart via user_id
-  shopping carts!: shopping cart[];
-  getShopping carts!: Sequelize.HasManyGetAssociationsMixin<shopping cart>;
-  setShopping carts!: Sequelize.HasManySetAssociationsMixin<shopping cart, shopping cartId>;
-  addShopping cart!: Sequelize.HasManyAddAssociationMixin<shopping cart, shopping cartId>;
-  addShopping carts!: Sequelize.HasManyAddAssociationsMixin<shopping cart, shopping cartId>;
-  createShopping cart!: Sequelize.HasManyCreateAssociationMixin<shopping cart>;
-  removeShopping cart!: Sequelize.HasManyRemoveAssociationMixin<shopping cart, shopping cartId>;
-  removeShopping carts!: Sequelize.HasManyRemoveAssociationsMixin<shopping cart, shopping cartId>;
-  hasShopping cart!: Sequelize.HasManyHasAssociationMixin<shopping cart, shopping cartId>;
-  hasShopping carts!: Sequelize.HasManyHasAssociationsMixin<shopping cart, shopping cartId>;
-  countShopping carts!: Sequelize.HasManyCountAssociationsMixin;
+  // user hasMany shopping_cart via user_id
+  shopping_carts!: shopping_cart[];
+  getShopping_carts!: Sequelize.HasManyGetAssociationsMixin<shopping_cart>;
+  setShopping_carts!: Sequelize.HasManySetAssociationsMixin<shopping_cart, shopping_cartId>;
+  addShopping_cart!: Sequelize.HasManyAddAssociationMixin<shopping_cart, shopping_cartId>;
+  addShopping_carts!: Sequelize.HasManyAddAssociationsMixin<shopping_cart, shopping_cartId>;
+  createShopping_cart!: Sequelize.HasManyCreateAssociationMixin<shopping_cart>;
+  removeShopping_cart!: Sequelize.HasManyRemoveAssociationMixin<shopping_cart, shopping_cartId>;
+  removeShopping_carts!: Sequelize.HasManyRemoveAssociationsMixin<shopping_cart, shopping_cartId>;
+  hasShopping_cart!: Sequelize.HasManyHasAssociationMixin<shopping_cart, shopping_cartId>;
+  hasShopping_carts!: Sequelize.HasManyHasAssociationsMixin<shopping_cart, shopping_cartId>;
+  countShopping_carts!: Sequelize.HasManyCountAssociationsMixin;
   // user hasMany user_address via user_id
   user_addresses!: user_address[];
   getUser_addresses!: Sequelize.HasManyGetAssociationsMixin<user_address>;

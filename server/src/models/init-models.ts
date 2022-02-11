@@ -23,16 +23,16 @@ import { order_detail_has_item as _order_detail_has_item } from "./order_detail_
 import type { order_detail_has_itemAttributes, order_detail_has_itemCreationAttributes } from "./order_detail_has_item";
 import { order_detail_has_order as _order_detail_has_order } from "./order_detail_has_order";
 import type { order_detail_has_orderAttributes, order_detail_has_orderCreationAttributes } from "./order_detail_has_order";
-import { order_detail_has_shopping cart as _order_detail_has_shopping cart } from "./order_detail_has_shopping cart";
-import type { order_detail_has_shopping cartAttributes, order_detail_has_shopping cartCreationAttributes } from "./order_detail_has_shopping cart";
 import { order_has_user as _order_has_user } from "./order_has_user";
 import type { order_has_userAttributes, order_has_userCreationAttributes } from "./order_has_user";
 import { refreshtoken as _refreshtoken } from "./refreshtoken";
 import type { refreshtokenAttributes, refreshtokenCreationAttributes } from "./refreshtoken";
 import { shipping as _shipping } from "./shipping";
 import type { shippingAttributes, shippingCreationAttributes } from "./shipping";
-import { shopping cart as _shopping cart } from "./shopping cart";
-import type { shopping cartAttributes, shopping cartCreationAttributes } from "./shopping cart";
+import { shopping_cart as _shopping_cart } from "./shopping_cart";
+import type { shopping_cartAttributes, shopping_cartCreationAttributes } from "./shopping_cart";
+import { shopping_cart_has_order_detail as _shopping_cart_has_order_detail } from "./shopping_cart_has_order_detail";
+import type { shopping_cart_has_order_detailAttributes, shopping_cart_has_order_detailCreationAttributes } from "./shopping_cart_has_order_detail";
 import { user as _user } from "./user";
 import type { userAttributes, userCreationAttributes } from "./user";
 import { user_address as _user_address } from "./user_address";
@@ -57,11 +57,11 @@ export {
   _order_detail as order_detail,
   _order_detail_has_item as order_detail_has_item,
   _order_detail_has_order as order_detail_has_order,
-  _order_detail_has_shopping cart as order_detail_has_shopping cart,
   _order_has_user as order_has_user,
   _refreshtoken as refreshtoken,
   _shipping as shipping,
-  _shopping cart as shopping cart,
+  _shopping_cart as shopping_cart,
+  _shopping_cart_has_order_detail as shopping_cart_has_order_detail,
   _user as user,
   _user_address as user_address,
   _user_payment as user_payment,
@@ -94,16 +94,16 @@ export type {
   order_detail_has_itemCreationAttributes,
   order_detail_has_orderAttributes,
   order_detail_has_orderCreationAttributes,
-  order_detail_has_shopping cartAttributes,
-  order_detail_has_shopping cartCreationAttributes,
   order_has_userAttributes,
   order_has_userCreationAttributes,
   refreshtokenAttributes,
   refreshtokenCreationAttributes,
   shippingAttributes,
   shippingCreationAttributes,
-  shopping cartAttributes,
-  shopping cartCreationAttributes,
+  shopping_cartAttributes,
+  shopping_cartCreationAttributes,
+  shopping_cart_has_order_detailAttributes,
+  shopping_cart_has_order_detailCreationAttributes,
   userAttributes,
   userCreationAttributes,
   user_addressAttributes,
@@ -129,11 +129,11 @@ export function initModels(sequelize: Sequelize) {
   const order_detail = _order_detail.initModel(sequelize);
   const order_detail_has_item = _order_detail_has_item.initModel(sequelize);
   const order_detail_has_order = _order_detail_has_order.initModel(sequelize);
-  const order_detail_has_shopping cart = _order_detail_has_shopping cart.initModel(sequelize);
   const order_has_user = _order_has_user.initModel(sequelize);
   const refreshtoken = _refreshtoken.initModel(sequelize);
   const shipping = _shipping.initModel(sequelize);
-  const shopping cart = _shopping cart.initModel(sequelize);
+  const shopping_cart = _shopping_cart.initModel(sequelize);
+  const shopping_cart_has_order_detail = _shopping_cart_has_order_detail.initModel(sequelize);
   const user = _user.initModel(sequelize);
   const user_address = _user_address.initModel(sequelize);
   const user_payment = _user_payment.initModel(sequelize);
@@ -153,8 +153,8 @@ export function initModels(sequelize: Sequelize) {
   order_detail.belongsToMany(item, { as: 'item_id_item_order_detail_has_items', through: order_detail_has_item, foreignKey: "order_detail_id", otherKey: "item_id" });
   order_detail.belongsToMany(item_inventory, { as: 'item_inventory_id_item_inventories', through: item_inventory_has_order_detail, foreignKey: "order_detail_id", otherKey: "item_inventory_id" });
   order_detail.belongsToMany(order, { as: 'order_id_orders', through: order_detail_has_order, foreignKey: "order_detail_id", otherKey: "order_id" });
-  order_detail.belongsToMany(shopping cart, { as: 'shopping cart_id_shopping carts', through: order_detail_has_shopping cart, foreignKey: "order_detail_id", otherKey: "shopping cart_id" });
-  shopping cart.belongsToMany(order_detail, { as: 'order_detail_id_order_detail_order_detail_has_shopping carts', through: order_detail_has_shopping cart, foreignKey: "shopping cart_id", otherKey: "order_detail_id" });
+  order_detail.belongsToMany(shopping_cart, { as: 'shopping_cart_id_shopping_carts', through: shopping_cart_has_order_detail, foreignKey: "order_detail_id", otherKey: "shopping_cart_id" });
+  shopping_cart.belongsToMany(order_detail, { as: 'order_detail_id_order_detail_shopping_cart_has_order_details', through: shopping_cart_has_order_detail, foreignKey: "shopping_cart_id", otherKey: "order_detail_id" });
   user.belongsToMany(chat, { as: 'chat_id_chat_chat_has_users', through: chat_has_user, foreignKey: "user_id", otherKey: "chat_id" });
   user.belongsToMany(order, { as: 'order_id_order_order_has_users', through: order_has_user, foreignKey: "user_id", otherKey: "order_id" });
   user_payment.belongsToMany(order, { as: 'order_id_order_user_payment_has_orders', through: user_payment_has_order, foreignKey: "user_payment_id", otherKey: "order_id" });
@@ -188,14 +188,14 @@ export function initModels(sequelize: Sequelize) {
   order_detail.hasMany(order_detail_has_item, { as: "order_detail_has_items", foreignKey: "order_detail_id"});
   order_detail_has_order.belongsTo(order_detail, { as: "order_detail", foreignKey: "order_detail_id"});
   order_detail.hasMany(order_detail_has_order, { as: "order_detail_has_orders", foreignKey: "order_detail_id"});
-  order_detail_has_shopping cart.belongsTo(order_detail, { as: "order_detail", foreignKey: "order_detail_id"});
-  order_detail.hasMany(order_detail_has_shopping cart, { as: "order_detail_has_shopping carts", foreignKey: "order_detail_id"});
+  shopping_cart_has_order_detail.belongsTo(order_detail, { as: "order_detail", foreignKey: "order_detail_id"});
+  order_detail.hasMany(shopping_cart_has_order_detail, { as: "shopping_cart_has_order_details", foreignKey: "order_detail_id"});
   user_payment_has_shipping.belongsTo(shipping, { as: "shipping", foreignKey: "shipping_id"});
   shipping.hasMany(user_payment_has_shipping, { as: "user_payment_has_shippings", foreignKey: "shipping_id"});
   user_payment_has_shipping.belongsTo(shipping, { as: "shipping_order", foreignKey: "shipping_order_id"});
   shipping.hasMany(user_payment_has_shipping, { as: "shipping_order_user_payment_has_shippings", foreignKey: "shipping_order_id"});
-  order_detail_has_shopping cart.belongsTo(shopping cart, { as: "shopping cart", foreignKey: "shopping cart_id"});
-  shopping cart.hasMany(order_detail_has_shopping cart, { as: "order_detail_has_shopping carts", foreignKey: "shopping cart_id"});
+  shopping_cart_has_order_detail.belongsTo(shopping_cart, { as: "shopping_cart", foreignKey: "shopping_cart_id"});
+  shopping_cart.hasMany(shopping_cart_has_order_detail, { as: "shopping_cart_has_order_details", foreignKey: "shopping_cart_id"});
   chat_has_user.belongsTo(user, { as: "user", foreignKey: "user_id"});
   user.hasMany(chat_has_user, { as: "chat_has_users", foreignKey: "user_id"});
   item.belongsTo(user, { as: "user", foreignKey: "user_id"});
@@ -204,8 +204,8 @@ export function initModels(sequelize: Sequelize) {
   user.hasMany(order_has_user, { as: "order_has_users", foreignKey: "user_id"});
   refreshtoken.belongsTo(user, { as: "user", foreignKey: "user_id"});
   user.hasMany(refreshtoken, { as: "refreshtokens", foreignKey: "user_id"});
-  shopping cart.belongsTo(user, { as: "user", foreignKey: "user_id"});
-  user.hasMany(shopping cart, { as: "shopping carts", foreignKey: "user_id"});
+  shopping_cart.belongsTo(user, { as: "user", foreignKey: "user_id"});
+  user.hasMany(shopping_cart, { as: "shopping_carts", foreignKey: "user_id"});
   user_address.belongsTo(user, { as: "user", foreignKey: "user_id"});
   user.hasMany(user_address, { as: "user_addresses", foreignKey: "user_id"});
   user_payment.belongsTo(user, { as: "user", foreignKey: "user_id"});
@@ -228,11 +228,11 @@ export function initModels(sequelize: Sequelize) {
     order_detail: order_detail,
     order_detail_has_item: order_detail_has_item,
     order_detail_has_order: order_detail_has_order,
-    order_detail_has_shopping cart: order_detail_has_shopping cart,
     order_has_user: order_has_user,
     refreshtoken: refreshtoken,
     shipping: shipping,
-    shopping cart: shopping cart,
+    shopping_cart: shopping_cart,
+    shopping_cart_has_order_detail: shopping_cart_has_order_detail,
     user: user,
     user_address: user_address,
     user_payment: user_payment,
