@@ -4,13 +4,16 @@ import type { category, categoryId } from './category';
 import type { chat, chatId } from './chat';
 import type { chat_has_item, chat_has_itemId } from './chat_has_item';
 import type { item_has_category, item_has_categoryId } from './item_has_category';
+import type { item_inventory, item_inventoryId } from './item_inventory';
+import type { order_detail, order_detailId } from './order_detail';
+import type { order_detail_has_item, order_detail_has_itemId } from './order_detail_has_item';
 import type { user, userId } from './user';
 
 export interface itemAttributes {
   id: number;
   title: string;
   contents?: string;
-  price?: string;
+  price?: number;
   createdAt?: Date;
   updatedAt?: Date;
   image_src?: string;
@@ -26,7 +29,7 @@ export class item extends Model<itemAttributes, itemCreationAttributes> implemen
   id!: number;
   title!: string;
   contents?: string;
-  price?: string;
+  price?: number;
   createdAt?: Date;
   updatedAt?: Date;
   image_src?: string;
@@ -80,6 +83,42 @@ export class item extends Model<itemAttributes, itemCreationAttributes> implemen
   hasItem_has_category!: Sequelize.HasManyHasAssociationMixin<item_has_category, item_has_categoryId>;
   hasItem_has_categories!: Sequelize.HasManyHasAssociationsMixin<item_has_category, item_has_categoryId>;
   countItem_has_categories!: Sequelize.HasManyCountAssociationsMixin;
+  // item hasMany item_inventory via item_id
+  item_inventories!: item_inventory[];
+  getItem_inventories!: Sequelize.HasManyGetAssociationsMixin<item_inventory>;
+  setItem_inventories!: Sequelize.HasManySetAssociationsMixin<item_inventory, item_inventoryId>;
+  addItem_inventory!: Sequelize.HasManyAddAssociationMixin<item_inventory, item_inventoryId>;
+  addItem_inventories!: Sequelize.HasManyAddAssociationsMixin<item_inventory, item_inventoryId>;
+  createItem_inventory!: Sequelize.HasManyCreateAssociationMixin<item_inventory>;
+  removeItem_inventory!: Sequelize.HasManyRemoveAssociationMixin<item_inventory, item_inventoryId>;
+  removeItem_inventories!: Sequelize.HasManyRemoveAssociationsMixin<item_inventory, item_inventoryId>;
+  hasItem_inventory!: Sequelize.HasManyHasAssociationMixin<item_inventory, item_inventoryId>;
+  hasItem_inventories!: Sequelize.HasManyHasAssociationsMixin<item_inventory, item_inventoryId>;
+  countItem_inventories!: Sequelize.HasManyCountAssociationsMixin;
+  // item belongsToMany order_detail via item_id and order_detail_id
+  order_detail_id_order_detail_order_detail_has_items!: order_detail[];
+  getOrder_detail_id_order_detail_order_detail_has_items!: Sequelize.BelongsToManyGetAssociationsMixin<order_detail>;
+  setOrder_detail_id_order_detail_order_detail_has_items!: Sequelize.BelongsToManySetAssociationsMixin<order_detail, order_detailId>;
+  addOrder_detail_id_order_detail_order_detail_has_item!: Sequelize.BelongsToManyAddAssociationMixin<order_detail, order_detailId>;
+  addOrder_detail_id_order_detail_order_detail_has_items!: Sequelize.BelongsToManyAddAssociationsMixin<order_detail, order_detailId>;
+  createOrder_detail_id_order_detail_order_detail_has_item!: Sequelize.BelongsToManyCreateAssociationMixin<order_detail>;
+  removeOrder_detail_id_order_detail_order_detail_has_item!: Sequelize.BelongsToManyRemoveAssociationMixin<order_detail, order_detailId>;
+  removeOrder_detail_id_order_detail_order_detail_has_items!: Sequelize.BelongsToManyRemoveAssociationsMixin<order_detail, order_detailId>;
+  hasOrder_detail_id_order_detail_order_detail_has_item!: Sequelize.BelongsToManyHasAssociationMixin<order_detail, order_detailId>;
+  hasOrder_detail_id_order_detail_order_detail_has_items!: Sequelize.BelongsToManyHasAssociationsMixin<order_detail, order_detailId>;
+  countOrder_detail_id_order_detail_order_detail_has_items!: Sequelize.BelongsToManyCountAssociationsMixin;
+  // item hasMany order_detail_has_item via item_id
+  order_detail_has_items!: order_detail_has_item[];
+  getOrder_detail_has_items!: Sequelize.HasManyGetAssociationsMixin<order_detail_has_item>;
+  setOrder_detail_has_items!: Sequelize.HasManySetAssociationsMixin<order_detail_has_item, order_detail_has_itemId>;
+  addOrder_detail_has_item!: Sequelize.HasManyAddAssociationMixin<order_detail_has_item, order_detail_has_itemId>;
+  addOrder_detail_has_items!: Sequelize.HasManyAddAssociationsMixin<order_detail_has_item, order_detail_has_itemId>;
+  createOrder_detail_has_item!: Sequelize.HasManyCreateAssociationMixin<order_detail_has_item>;
+  removeOrder_detail_has_item!: Sequelize.HasManyRemoveAssociationMixin<order_detail_has_item, order_detail_has_itemId>;
+  removeOrder_detail_has_items!: Sequelize.HasManyRemoveAssociationsMixin<order_detail_has_item, order_detail_has_itemId>;
+  hasOrder_detail_has_item!: Sequelize.HasManyHasAssociationMixin<order_detail_has_item, order_detail_has_itemId>;
+  hasOrder_detail_has_items!: Sequelize.HasManyHasAssociationsMixin<order_detail_has_item, order_detail_has_itemId>;
+  countOrder_detail_has_items!: Sequelize.HasManyCountAssociationsMixin;
   // item belongsTo user via user_id
   user!: user;
   getUser!: Sequelize.BelongsToGetAssociationMixin<user>;
@@ -99,11 +138,11 @@ export class item extends Model<itemAttributes, itemCreationAttributes> implemen
       allowNull: false
     },
     contents: {
-      type: DataTypes.STRING(255),
+      type: DataTypes.TEXT,
       allowNull: true
     },
     price: {
-      type: DataTypes.STRING(45),
+      type: DataTypes.INTEGER,
       allowNull: true
     },
     image_src: {
