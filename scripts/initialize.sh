@@ -2,7 +2,7 @@
 cd /home/ubuntu/comong/server
 npm install
 npm install pm2@latest -g
-npm build
+npm run build
 sudo apt-get update
 sudo apt-get install authbind
 sudo touch /etc/authbind/byport/80
