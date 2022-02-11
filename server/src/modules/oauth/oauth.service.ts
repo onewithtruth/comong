@@ -2,7 +2,7 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 import { Injectable, HttpException, HttpStatus, Response} from '@nestjs/common';
-import { OauthRes } from './entities/oauthres.entity';
+import { OauthRes } from './entities/oauthRes.entity';
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 const models = require('../../models/index');
 const jwt = require('jsonwebtoken')
