@@ -1,1 +1,1 @@
-web: npm run deploy 'cd ./server/'
+web: sh -c 'cd ./server/ && npm run deploy'
