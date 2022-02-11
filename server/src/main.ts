@@ -19,7 +19,6 @@ async function bootstrap() {
     forbidNonWhitelisted: true,
     transform: true,
   };
-
   if (
     fs.existsSync('./secrets/comong.key.pem') &&
     fs.existsSync('./secrets/comong.crt.pem')
