@@ -19,7 +19,7 @@ async function bootstrap() {
     forbidNonWhitelisted: true,
     transform: true,
   };
-  
+
   if (
     fs.existsSync('./secrets/comong.key.pem') &&
     fs.existsSync('./secrets/comong.crt.pem')
@@ -43,8 +43,9 @@ async function bootstrap() {
     app.enableCors(corsOptions);
     app.use(cookieParser());
     setupSwagger(app);
-    await app.listen(80);
-    console.log(`http server runnning on port 80`);
+    const port = process.env.PORT || 3000
+    await app.listen(port);
+    console.log(`http server runnning`);
   }
 }
 bootstrap();
