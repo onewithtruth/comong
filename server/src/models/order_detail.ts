@@ -6,8 +6,8 @@ import type { item_inventory_has_order_detail, item_inventory_has_order_detailId
 import type { order, orderId } from './order';
 import type { order_detail_has_item, order_detail_has_itemId } from './order_detail_has_item';
 import type { order_detail_has_order, order_detail_has_orderId } from './order_detail_has_order';
-import type { order_detail_has_shopping cart, order_detail_has_shopping cartId } from './order_detail_has_shopping cart';
-import type { shopping cart, shopping cartId } from './shopping cart';
+import type { shopping_cart, shopping_cartId } from './shopping_cart';
+import type { shopping_cart_has_order_detail, shopping_cart_has_order_detailId } from './shopping_cart_has_order_detail';
 
 export interface order_detailAttributes {
   id: number;
@@ -103,30 +103,30 @@ export class order_detail extends Model<order_detailAttributes, order_detailCrea
   hasOrder_detail_has_order!: Sequelize.HasManyHasAssociationMixin<order_detail_has_order, order_detail_has_orderId>;
   hasOrder_detail_has_orders!: Sequelize.HasManyHasAssociationsMixin<order_detail_has_order, order_detail_has_orderId>;
   countOrder_detail_has_orders!: Sequelize.HasManyCountAssociationsMixin;
-  // order_detail hasMany order_detail_has_shopping cart via order_detail_id
-  order_detail_has_shopping carts!: order_detail_has_shopping cart[];
-  getOrder_detail_has_shopping carts!: Sequelize.HasManyGetAssociationsMixin<order_detail_has_shopping cart>;
-  setOrder_detail_has_shopping carts!: Sequelize.HasManySetAssociationsMixin<order_detail_has_shopping cart, order_detail_has_shopping cartId>;
-  addOrder_detail_has_shopping cart!: Sequelize.HasManyAddAssociationMixin<order_detail_has_shopping cart, order_detail_has_shopping cartId>;
-  addOrder_detail_has_shopping carts!: Sequelize.HasManyAddAssociationsMixin<order_detail_has_shopping cart, order_detail_has_shopping cartId>;
-  createOrder_detail_has_shopping cart!: Sequelize.HasManyCreateAssociationMixin<order_detail_has_shopping cart>;
-  removeOrder_detail_has_shopping cart!: Sequelize.HasManyRemoveAssociationMixin<order_detail_has_shopping cart, order_detail_has_shopping cartId>;
-  removeOrder_detail_has_shopping carts!: Sequelize.HasManyRemoveAssociationsMixin<order_detail_has_shopping cart, order_detail_has_shopping cartId>;
-  hasOrder_detail_has_shopping cart!: Sequelize.HasManyHasAssociationMixin<order_detail_has_shopping cart, order_detail_has_shopping cartId>;
-  hasOrder_detail_has_shopping carts!: Sequelize.HasManyHasAssociationsMixin<order_detail_has_shopping cart, order_detail_has_shopping cartId>;
-  countOrder_detail_has_shopping carts!: Sequelize.HasManyCountAssociationsMixin;
-  // order_detail belongsToMany shopping cart via order_detail_id and shopping cart_id
-  shopping cart_id_shopping carts!: shopping cart[];
-  getShopping cart_id_shopping carts!: Sequelize.BelongsToManyGetAssociationsMixin<shopping cart>;
-  setShopping cart_id_shopping carts!: Sequelize.BelongsToManySetAssociationsMixin<shopping cart, shopping cartId>;
-  addShopping cart_id_shopping cart!: Sequelize.BelongsToManyAddAssociationMixin<shopping cart, shopping cartId>;
-  addShopping cart_id_shopping carts!: Sequelize.BelongsToManyAddAssociationsMixin<shopping cart, shopping cartId>;
-  createShopping cart_id_shopping cart!: Sequelize.BelongsToManyCreateAssociationMixin<shopping cart>;
-  removeShopping cart_id_shopping cart!: Sequelize.BelongsToManyRemoveAssociationMixin<shopping cart, shopping cartId>;
-  removeShopping cart_id_shopping carts!: Sequelize.BelongsToManyRemoveAssociationsMixin<shopping cart, shopping cartId>;
-  hasShopping cart_id_shopping cart!: Sequelize.BelongsToManyHasAssociationMixin<shopping cart, shopping cartId>;
-  hasShopping cart_id_shopping carts!: Sequelize.BelongsToManyHasAssociationsMixin<shopping cart, shopping cartId>;
-  countShopping cart_id_shopping carts!: Sequelize.BelongsToManyCountAssociationsMixin;
+  // order_detail belongsToMany shopping_cart via order_detail_id and shopping_cart_id
+  shopping_cart_id_shopping_carts!: shopping_cart[];
+  getShopping_cart_id_shopping_carts!: Sequelize.BelongsToManyGetAssociationsMixin<shopping_cart>;
+  setShopping_cart_id_shopping_carts!: Sequelize.BelongsToManySetAssociationsMixin<shopping_cart, shopping_cartId>;
+  addShopping_cart_id_shopping_cart!: Sequelize.BelongsToManyAddAssociationMixin<shopping_cart, shopping_cartId>;
+  addShopping_cart_id_shopping_carts!: Sequelize.BelongsToManyAddAssociationsMixin<shopping_cart, shopping_cartId>;
+  createShopping_cart_id_shopping_cart!: Sequelize.BelongsToManyCreateAssociationMixin<shopping_cart>;
+  removeShopping_cart_id_shopping_cart!: Sequelize.BelongsToManyRemoveAssociationMixin<shopping_cart, shopping_cartId>;
+  removeShopping_cart_id_shopping_carts!: Sequelize.BelongsToManyRemoveAssociationsMixin<shopping_cart, shopping_cartId>;
+  hasShopping_cart_id_shopping_cart!: Sequelize.BelongsToManyHasAssociationMixin<shopping_cart, shopping_cartId>;
+  hasShopping_cart_id_shopping_carts!: Sequelize.BelongsToManyHasAssociationsMixin<shopping_cart, shopping_cartId>;
+  countShopping_cart_id_shopping_carts!: Sequelize.BelongsToManyCountAssociationsMixin;
+  // order_detail hasMany shopping_cart_has_order_detail via order_detail_id
+  shopping_cart_has_order_details!: shopping_cart_has_order_detail[];
+  getShopping_cart_has_order_details!: Sequelize.HasManyGetAssociationsMixin<shopping_cart_has_order_detail>;
+  setShopping_cart_has_order_details!: Sequelize.HasManySetAssociationsMixin<shopping_cart_has_order_detail, shopping_cart_has_order_detailId>;
+  addShopping_cart_has_order_detail!: Sequelize.HasManyAddAssociationMixin<shopping_cart_has_order_detail, shopping_cart_has_order_detailId>;
+  addShopping_cart_has_order_details!: Sequelize.HasManyAddAssociationsMixin<shopping_cart_has_order_detail, shopping_cart_has_order_detailId>;
+  createShopping_cart_has_order_detail!: Sequelize.HasManyCreateAssociationMixin<shopping_cart_has_order_detail>;
+  removeShopping_cart_has_order_detail!: Sequelize.HasManyRemoveAssociationMixin<shopping_cart_has_order_detail, shopping_cart_has_order_detailId>;
+  removeShopping_cart_has_order_details!: Sequelize.HasManyRemoveAssociationsMixin<shopping_cart_has_order_detail, shopping_cart_has_order_detailId>;
+  hasShopping_cart_has_order_detail!: Sequelize.HasManyHasAssociationMixin<shopping_cart_has_order_detail, shopping_cart_has_order_detailId>;
+  hasShopping_cart_has_order_details!: Sequelize.HasManyHasAssociationsMixin<shopping_cart_has_order_detail, shopping_cart_has_order_detailId>;
+  countShopping_cart_has_order_details!: Sequelize.HasManyCountAssociationsMixin;
 
   static initModel(sequelize: Sequelize.Sequelize): typeof order_detail {
     return order_detail.init({
