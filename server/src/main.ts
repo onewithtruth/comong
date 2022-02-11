@@ -42,7 +42,7 @@ async function bootstrap() {
     app.enableCors(corsOptions);
     app.use(cookieParser());
     setupSwagger(app);
-    const port = process.env.PORT || 3000
+    const port = 80
     await app.listen(port);
     console.log(`http server runnning`);
   }
