@@ -5,9 +5,11 @@ import { Body, Controller, Post, Response } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiCreatedResponse, ApiOkResponse, ApiBadRequestResponse } from '@nestjs/swagger';
 import { OauthReqDto } from './dto/oauthReq.dto';
 import { OauthService } from './oauth.service';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('oauth')
-@ApiTags('Oauth 2.0 Login')
+@ApiTags('소셜 인증 관련')
+
 export class OauthController {
   constructor(private readonly oauthService: OauthService) {}
 
