@@ -3,7 +3,7 @@ import { ItemsService } from './items.service';
 import { CreateItemDto } from './dto/create-item.dto';
 import { UpdateItemDto } from './dto/update-item.dto';
 import { category } from './entities/category.entity';
-import { ApiTags, ApiOperation, ApiCreatedResponse } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
 
 @Controller('items')
 @ApiTags('상품 정보 관련')
@@ -18,12 +18,13 @@ export class ItemsController {
 
   @Get()
   @ApiOperation({ summary: '상품 정보 목록', description: '회원 가입 요청을 받습니다.' })
-  @ApiCreatedResponse({ description: '유저를 생성한다.'})
   findAll() {
     return this.itemsService.findAll();
   }
 
   @Get('categorylist')
+  @ApiOperation({ summary: 'item category list', description: 'request for item category list' })
+  @ApiOkResponse({ description: 'successful'})
   getCategoryList(): Promise<category[]> {
     return this.itemsService.getCategoryList();
   }
