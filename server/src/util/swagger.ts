@@ -7,10 +7,21 @@ import { SwaggerModule, DocumentBuilder, SwaggerCustomOptions } from '@nestjs/sw
  * @param {INestApplication} app
  */
 export function setupSwagger(app: INestApplication): void {
-  const options = new DocumentBuilder()
+  const options = new DocumentBuilder().addBearerAuth(
+    {
+      type: 'http',
+      scheme: 'bearer',
+      name: 'JWT',
+      in: 'header',
+    },
+    'accessToken',
+  )
+    .setVersion('1.1.0')
     .setTitle('Comong API Docs')
     .setDescription('코몽(Comong) 서비스의 Api 문서입니다.')
-    .setVersion('1.0.0')
+    .setVersion('1.0.2')
+    .addServer('https://dev1.comong.kr', '테스트 서버')
+    .addServer('https://api.comong.kr', '상용 서버')
     .build();
 
 
@@ -82,6 +93,9 @@ export function setupSwagger(app: INestApplication): void {
     .swagger-ui .info .title {  font-family: 'NanumSquareRound', 'sans-serif'; font-weight: 800 }
     .swagger-ui .opblock-description-wrapper p, .swagger-ui .opblock-external-docs-wrapper p, .swagger-ui .opblock-title_normal p {  font-family: 'NanumSquareRound', 'sans-serif'; font-weight: 500 }
     .swagger-ui .response-col_links {  font-family: 'NanumSquareRound', 'sans-serif'; font-weight: 500 }
+    .swagger-ui .info { margin: 50px 0 0 0 }
+    .swagger-ui textarea  { font-family: 'Roboto Mono', 'NanumSquareRound', 'sans-serif '; font-size: 14px; font-weight: 400}
+    .swagger-ui .opblock-body pre.microlight { font-family: 'Roboto Mono', 'NanumSquareRound', 'sans-serif '; font-size: 14px; font-weight: 400}
     `,
     customJs: `custom.js`,
     customSiteTitle: 'Comong Api Docs',
