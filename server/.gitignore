@@ -2,7 +2,7 @@
 /dist
 /node_modules
 /secrets
-
+.prettierrc
 # Logs
 logs
 *.log
