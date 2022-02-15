@@ -8,7 +8,7 @@ import { getUser } from '../../decorators/getUser';
 const models = require('../../models/index');
 
 /* jwt부분 추후 분리 예정*/
-import { JwtService } from '@nestjs/jwt';
+import * as jwt from 'jsonwebtoken'
 import { request } from 'express';
 /* jwt부분 추후 분리 예정*/
 
@@ -16,7 +16,6 @@ export type User = any;
 
 @Injectable()
 export class UsersService {
-	constructor(private readonly jwt: JwtService) {}
 	private readonly logger = new Logger(UsersService.name);
 
 	async create(createUserDto: CreateUserDto) {
@@ -42,15 +41,14 @@ export class UsersService {
 
 	async signIn(userInfo: SignInUserDto) {
 		const user = await models.user.findOne({
-			where: userInfo,
+			where: { ...userInfo },
 		});
 		if (user) {
-			const accessToken = await this.jwt.sign(user.dataValues, {
-				secret: process.env.ACCESS_SECRET,
+			delete user.dataValues.password;
+			console.log('엑세스 시크릿', process.env.ACCESS_SECRET)
+			const accessToken = await jwt.sign(user.dataValues, process.env.ACCESS_SECRET, {
 				expiresIn: '1h',
 			});
-			//console.log(accessToken)
-			delete user.dataValues.password;
 			return { message: 'successful', user, accessToken };
 		} else {
 			return { message: 'err', user };
@@ -65,8 +63,15 @@ export class UsersService {
 		return user;
 	}
 
-	update(id: number, updateUserDto: UpdateUserDto) {
-		return `This action updates a #${id} user`;
+	async update(user: User, changes: UpdateUserDto) {
+		const changed = await models.user.update( changes, {
+			where: { id: user.id }
+		})
+		if (changed) {
+			return { message: 'successful' };
+		} else {
+			throw new BadRequestException('invalid value for property');
+		}
 	}
 
 	async remove(user) {
