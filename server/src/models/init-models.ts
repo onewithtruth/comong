@@ -7,10 +7,16 @@ import { chat_has_item as _chat_has_item } from "./chat_has_item";
 import type { chat_has_itemAttributes, chat_has_itemCreationAttributes } from "./chat_has_item";
 import { chat_has_user as _chat_has_user } from "./chat_has_user";
 import type { chat_has_userAttributes, chat_has_userCreationAttributes } from "./chat_has_user";
+import { comment as _comment } from "./comment";
+import type { commentAttributes, commentCreationAttributes } from "./comment";
+import { comment_has_user as _comment_has_user } from "./comment_has_user";
+import type { comment_has_userAttributes, comment_has_userCreationAttributes } from "./comment_has_user";
 import { item as _item } from "./item";
 import type { itemAttributes, itemCreationAttributes } from "./item";
 import { item_has_category as _item_has_category } from "./item_has_category";
 import type { item_has_categoryAttributes, item_has_categoryCreationAttributes } from "./item_has_category";
+import { item_has_comment as _item_has_comment } from "./item_has_comment";
+import type { item_has_commentAttributes, item_has_commentCreationAttributes } from "./item_has_comment";
 import { item_inventory as _item_inventory } from "./item_inventory";
 import type { item_inventoryAttributes, item_inventoryCreationAttributes } from "./item_inventory";
 import { item_inventory_has_order_detail as _item_inventory_has_order_detail } from "./item_inventory_has_order_detail";
@@ -49,8 +55,11 @@ export {
   _chat as chat,
   _chat_has_item as chat_has_item,
   _chat_has_user as chat_has_user,
+  _comment as comment,
+  _comment_has_user as comment_has_user,
   _item as item,
   _item_has_category as item_has_category,
+  _item_has_comment as item_has_comment,
   _item_inventory as item_inventory,
   _item_inventory_has_order_detail as item_inventory_has_order_detail,
   _order as order,
@@ -78,10 +87,16 @@ export type {
   chat_has_itemCreationAttributes,
   chat_has_userAttributes,
   chat_has_userCreationAttributes,
+  commentAttributes,
+  commentCreationAttributes,
+  comment_has_userAttributes,
+  comment_has_userCreationAttributes,
   itemAttributes,
   itemCreationAttributes,
   item_has_categoryAttributes,
   item_has_categoryCreationAttributes,
+  item_has_commentAttributes,
+  item_has_commentCreationAttributes,
   item_inventoryAttributes,
   item_inventoryCreationAttributes,
   item_inventory_has_order_detailAttributes,
@@ -121,8 +136,11 @@ export function initModels(sequelize: Sequelize) {
   const chat = _chat.initModel(sequelize);
   const chat_has_item = _chat_has_item.initModel(sequelize);
   const chat_has_user = _chat_has_user.initModel(sequelize);
+  const comment = _comment.initModel(sequelize);
+  const comment_has_user = _comment_has_user.initModel(sequelize);
   const item = _item.initModel(sequelize);
   const item_has_category = _item_has_category.initModel(sequelize);
+  const item_has_comment = _item_has_comment.initModel(sequelize);
   const item_inventory = _item_inventory.initModel(sequelize);
   const item_inventory_has_order_detail = _item_inventory_has_order_detail.initModel(sequelize);
   const order = _order.initModel(sequelize);
@@ -143,8 +161,11 @@ export function initModels(sequelize: Sequelize) {
   category.belongsToMany(item, { as: 'item_id_item_item_has_categories', through: item_has_category, foreignKey: "category_id", otherKey: "item_id" });
   chat.belongsToMany(item, { as: 'item_id_items', through: chat_has_item, foreignKey: "chat_id", otherKey: "item_id" });
   chat.belongsToMany(user, { as: 'user_id_users', through: chat_has_user, foreignKey: "chat_id", otherKey: "user_id" });
+  comment.belongsToMany(item, { as: 'item_id_item_item_has_comments', through: item_has_comment, foreignKey: "comment_id", otherKey: "item_id" });
+  comment.belongsToMany(user, { as: 'user_id_user_comment_has_users', through: comment_has_user, foreignKey: "comment_id", otherKey: "user_id" });
   item.belongsToMany(category, { as: 'category_id_categories', through: item_has_category, foreignKey: "item_id", otherKey: "category_id" });
   item.belongsToMany(chat, { as: 'chat_id_chats', through: chat_has_item, foreignKey: "item_id", otherKey: "chat_id" });
+  item.belongsToMany(comment, { as: 'comment_id_comment_item_has_comments', through: item_has_comment, foreignKey: "item_id", otherKey: "comment_id" });
   item.belongsToMany(order_detail, { as: 'order_detail_id_order_detail_order_detail_has_items', through: order_detail_has_item, foreignKey: "item_id", otherKey: "order_detail_id" });
   item_inventory.belongsToMany(order_detail, { as: 'order_detail_id_order_details', through: item_inventory_has_order_detail, foreignKey: "item_inventory_id", otherKey: "order_detail_id" });
   order.belongsToMany(order_detail, { as: 'order_detail_id_order_detail_order_detail_has_orders', through: order_detail_has_order, foreignKey: "order_id", otherKey: "order_detail_id" });
@@ -156,6 +177,7 @@ export function initModels(sequelize: Sequelize) {
   order_detail.belongsToMany(shopping_cart, { as: 'shopping_cart_id_shopping_carts', through: shopping_cart_has_order_detail, foreignKey: "order_detail_id", otherKey: "shopping_cart_id" });
   shopping_cart.belongsToMany(order_detail, { as: 'order_detail_id_order_detail_shopping_cart_has_order_details', through: shopping_cart_has_order_detail, foreignKey: "shopping_cart_id", otherKey: "order_detail_id" });
   user.belongsToMany(chat, { as: 'chat_id_chat_chat_has_users', through: chat_has_user, foreignKey: "user_id", otherKey: "chat_id" });
+  user.belongsToMany(comment, { as: 'comment_id_comments', through: comment_has_user, foreignKey: "user_id", otherKey: "comment_id" });
   user.belongsToMany(order, { as: 'order_id_order_order_has_users', through: order_has_user, foreignKey: "user_id", otherKey: "order_id" });
   user_payment.belongsToMany(order, { as: 'order_id_order_user_payment_has_orders', through: user_payment_has_order, foreignKey: "user_payment_id", otherKey: "order_id" });
   item_has_category.belongsTo(category, { as: "category", foreignKey: "category_id"});
@@ -164,10 +186,16 @@ export function initModels(sequelize: Sequelize) {
   chat.hasMany(chat_has_item, { as: "chat_has_items", foreignKey: "chat_id"});
   chat_has_user.belongsTo(chat, { as: "chat", foreignKey: "chat_id"});
   chat.hasMany(chat_has_user, { as: "chat_has_users", foreignKey: "chat_id"});
+  comment_has_user.belongsTo(comment, { as: "comment", foreignKey: "comment_id"});
+  comment.hasMany(comment_has_user, { as: "comment_has_users", foreignKey: "comment_id"});
+  item_has_comment.belongsTo(comment, { as: "comment", foreignKey: "comment_id"});
+  comment.hasMany(item_has_comment, { as: "item_has_comments", foreignKey: "comment_id"});
   chat_has_item.belongsTo(item, { as: "item", foreignKey: "item_id"});
   item.hasMany(chat_has_item, { as: "chat_has_items", foreignKey: "item_id"});
   item_has_category.belongsTo(item, { as: "item", foreignKey: "item_id"});
   item.hasMany(item_has_category, { as: "item_has_categories", foreignKey: "item_id"});
+  item_has_comment.belongsTo(item, { as: "item", foreignKey: "item_id"});
+  item.hasMany(item_has_comment, { as: "item_has_comments", foreignKey: "item_id"});
   item_inventory.belongsTo(item, { as: "item", foreignKey: "item_id"});
   item.hasMany(item_inventory, { as: "item_inventories", foreignKey: "item_id"});
   order_detail_has_item.belongsTo(item, { as: "item", foreignKey: "item_id"});
@@ -198,6 +226,8 @@ export function initModels(sequelize: Sequelize) {
   shopping_cart.hasMany(shopping_cart_has_order_detail, { as: "shopping_cart_has_order_details", foreignKey: "shopping_cart_id"});
   chat_has_user.belongsTo(user, { as: "user", foreignKey: "user_id"});
   user.hasMany(chat_has_user, { as: "chat_has_users", foreignKey: "user_id"});
+  comment_has_user.belongsTo(user, { as: "user", foreignKey: "user_id"});
+  user.hasMany(comment_has_user, { as: "comment_has_users", foreignKey: "user_id"});
   item.belongsTo(user, { as: "user", foreignKey: "user_id"});
   user.hasMany(item, { as: "items", foreignKey: "user_id"});
   order_has_user.belongsTo(user, { as: "user", foreignKey: "user_id"});
@@ -220,8 +250,11 @@ export function initModels(sequelize: Sequelize) {
     chat: chat,
     chat_has_item: chat_has_item,
     chat_has_user: chat_has_user,
+    comment: comment,
+    comment_has_user: comment_has_user,
     item: item,
     item_has_category: item_has_category,
+    item_has_comment: item_has_comment,
     item_inventory: item_inventory,
     item_inventory_has_order_detail: item_inventory_has_order_detail,
     order: order,
