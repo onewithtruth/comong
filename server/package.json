@@ -8,7 +8,6 @@
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
-    "removemod": "rimraf node_modules",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
@@ -20,10 +19,10 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json",
-    "deploy": "npm i && npm run build && npm run start:prod"
+    "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@nestjs-modules/mailer": "^1.6.1",
     "@nestjs/axios": "^0.0.5",
     "@nestjs/common": "^8.0.0",
     "@nestjs/core": "^8.0.0",
@@ -35,11 +34,12 @@
     "class-validator": "^0.13.2",
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.0.0",
+    "ejs": "^3.1.6",
     "jsonwebtoken": "^8.5.1",
     "mysql2": "^2.3.3",
+    "nodemailer": "^6.7.2",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
-    "pm2": "^5.1.2",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0",

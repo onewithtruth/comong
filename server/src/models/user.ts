@@ -1,9 +1,9 @@
 import * as Sequelize from 'sequelize';
 import { DataTypes, Model, Optional } from 'sequelize';
+import type { category, categoryId } from './category';
+import type { category_has_user, category_has_userId } from './category_has_user';
 import type { chat, chatId } from './chat';
 import type { chat_has_user, chat_has_userId } from './chat_has_user';
-import type { comment, commentId } from './comment';
-import type { comment_has_user, comment_has_userId } from './comment_has_user';
 import type { item, itemId } from './item';
 import type { order, orderId } from './order';
 import type { order_has_user, order_has_userId } from './order_has_user';
@@ -42,6 +42,30 @@ export class user extends Model<userAttributes, userCreationAttributes> implemen
   birthday?: string;
   role!: string;
 
+  // user belongsToMany category via user_id and category_id
+  category_id_categories!: category[];
+  getCategory_id_categories!: Sequelize.BelongsToManyGetAssociationsMixin<category>;
+  setCategory_id_categories!: Sequelize.BelongsToManySetAssociationsMixin<category, categoryId>;
+  addCategory_id_category!: Sequelize.BelongsToManyAddAssociationMixin<category, categoryId>;
+  addCategory_id_categories!: Sequelize.BelongsToManyAddAssociationsMixin<category, categoryId>;
+  createCategory_id_category!: Sequelize.BelongsToManyCreateAssociationMixin<category>;
+  removeCategory_id_category!: Sequelize.BelongsToManyRemoveAssociationMixin<category, categoryId>;
+  removeCategory_id_categories!: Sequelize.BelongsToManyRemoveAssociationsMixin<category, categoryId>;
+  hasCategory_id_category!: Sequelize.BelongsToManyHasAssociationMixin<category, categoryId>;
+  hasCategory_id_categories!: Sequelize.BelongsToManyHasAssociationsMixin<category, categoryId>;
+  countCategory_id_categories!: Sequelize.BelongsToManyCountAssociationsMixin;
+  // user hasMany category_has_user via user_id
+  category_has_users!: category_has_user[];
+  getCategory_has_users!: Sequelize.HasManyGetAssociationsMixin<category_has_user>;
+  setCategory_has_users!: Sequelize.HasManySetAssociationsMixin<category_has_user, category_has_userId>;
+  addCategory_has_user!: Sequelize.HasManyAddAssociationMixin<category_has_user, category_has_userId>;
+  addCategory_has_users!: Sequelize.HasManyAddAssociationsMixin<category_has_user, category_has_userId>;
+  createCategory_has_user!: Sequelize.HasManyCreateAssociationMixin<category_has_user>;
+  removeCategory_has_user!: Sequelize.HasManyRemoveAssociationMixin<category_has_user, category_has_userId>;
+  removeCategory_has_users!: Sequelize.HasManyRemoveAssociationsMixin<category_has_user, category_has_userId>;
+  hasCategory_has_user!: Sequelize.HasManyHasAssociationMixin<category_has_user, category_has_userId>;
+  hasCategory_has_users!: Sequelize.HasManyHasAssociationsMixin<category_has_user, category_has_userId>;
+  countCategory_has_users!: Sequelize.HasManyCountAssociationsMixin;
   // user belongsToMany chat via user_id and chat_id
   chat_id_chat_chat_has_users!: chat[];
   getChat_id_chat_chat_has_users!: Sequelize.BelongsToManyGetAssociationsMixin<chat>;
@@ -66,30 +90,6 @@ export class user extends Model<userAttributes, userCreationAttributes> implemen
   hasChat_has_user!: Sequelize.HasManyHasAssociationMixin<chat_has_user, chat_has_userId>;
   hasChat_has_users!: Sequelize.HasManyHasAssociationsMixin<chat_has_user, chat_has_userId>;
   countChat_has_users!: Sequelize.HasManyCountAssociationsMixin;
-  // user belongsToMany comment via user_id and comment_id
-  comment_id_comments!: comment[];
-  getComment_id_comments!: Sequelize.BelongsToManyGetAssociationsMixin<comment>;
-  setComment_id_comments!: Sequelize.BelongsToManySetAssociationsMixin<comment, commentId>;
-  addComment_id_comment!: Sequelize.BelongsToManyAddAssociationMixin<comment, commentId>;
-  addComment_id_comments!: Sequelize.BelongsToManyAddAssociationsMixin<comment, commentId>;
-  createComment_id_comment!: Sequelize.BelongsToManyCreateAssociationMixin<comment>;
-  removeComment_id_comment!: Sequelize.BelongsToManyRemoveAssociationMixin<comment, commentId>;
-  removeComment_id_comments!: Sequelize.BelongsToManyRemoveAssociationsMixin<comment, commentId>;
-  hasComment_id_comment!: Sequelize.BelongsToManyHasAssociationMixin<comment, commentId>;
-  hasComment_id_comments!: Sequelize.BelongsToManyHasAssociationsMixin<comment, commentId>;
-  countComment_id_comments!: Sequelize.BelongsToManyCountAssociationsMixin;
-  // user hasMany comment_has_user via user_id
-  comment_has_users!: comment_has_user[];
-  getComment_has_users!: Sequelize.HasManyGetAssociationsMixin<comment_has_user>;
-  setComment_has_users!: Sequelize.HasManySetAssociationsMixin<comment_has_user, comment_has_userId>;
-  addComment_has_user!: Sequelize.HasManyAddAssociationMixin<comment_has_user, comment_has_userId>;
-  addComment_has_users!: Sequelize.HasManyAddAssociationsMixin<comment_has_user, comment_has_userId>;
-  createComment_has_user!: Sequelize.HasManyCreateAssociationMixin<comment_has_user>;
-  removeComment_has_user!: Sequelize.HasManyRemoveAssociationMixin<comment_has_user, comment_has_userId>;
-  removeComment_has_users!: Sequelize.HasManyRemoveAssociationsMixin<comment_has_user, comment_has_userId>;
-  hasComment_has_user!: Sequelize.HasManyHasAssociationMixin<comment_has_user, comment_has_userId>;
-  hasComment_has_users!: Sequelize.HasManyHasAssociationsMixin<comment_has_user, comment_has_userId>;
-  countComment_has_users!: Sequelize.HasManyCountAssociationsMixin;
   // user hasMany item via user_id
   items!: item[];
   getItems!: Sequelize.HasManyGetAssociationsMixin<item>;

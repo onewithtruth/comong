@@ -4,12 +4,11 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { SignInUserDto } from './dto/signin-user.dto';
 import { Logger } from '@nestjs/common';
-import { getUser } from '../../decorators/getUser';
 const models = require('../../models/index');
+const nodemailer = require('nodemailer');
 
 /* jwt부분 추후 분리 예정*/
 import * as jwt from 'jsonwebtoken'
-import { request } from 'express';
 /* jwt부분 추후 분리 예정*/
 
 export type User = any;
@@ -18,13 +17,14 @@ export type User = any;
 export class UsersService {
 	private readonly logger = new Logger(UsersService.name);
 
-	async create(createUserDto: CreateUserDto) {
-		const [user, isCreated] = await models.user.findOrCreate({
-			where: { email: createUserDto.email },
-			defaults: createUserDto,
+	async create(user: CreateUserDto) {
+		const [newUser, isCreated] = await models.user.findOrCreate({
+			where: { email: user.email },
+			defaults: { ...user },
 		});
+
 		if (isCreated) {
-			return { message: 'ok' };
+			return { message: 'successful' };	
 		} else {
 			throw new BadRequestException('invalid value for property');
 		}
@@ -43,6 +43,7 @@ export class UsersService {
 		const user = await models.user.findOne({
 			where: { ...userInfo },
 		});
+		console.log(userInfo)
 		if (user) {
 			delete user.dataValues.password;
 			console.log('엑세스 시크릿', process.env.ACCESS_SECRET)
