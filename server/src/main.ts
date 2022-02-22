@@ -27,6 +27,7 @@ async function bootstrap() {
 		exposedHeaders: ['Content-Type'],
 		credentials: true,
 	};
+	
 	const validationPipeOptions = {
 		whitelist: true,
 		forbidNonWhitelisted: true,
