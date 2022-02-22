@@ -18,5 +18,7 @@ export COMONG_KAKAO_REDIRECT_URL=$(aws ssm get-parameters --region ap-northeast-
 export COMONG_NAVER_CLIENT_ID=$(aws ssm get-parameters --region ap-northeast-2 --names COMONG_NAVER_CLIENT_ID --query Parameters[0].Value | sed 's/"//g')
 export COMONG_NAVER_CLIENT_SECRET=$(aws ssm get-parameters --region ap-northeast-2 --names COMONG_NAVER_CLIENT_SECRET --query Parameters[0].Value | sed 's/"//g')
 export COMONG_NAVER_REDIRECT_URL=$(aws ssm get-parameters --region ap-northeast-2 --names COMONG_NAVER_REDIRECT_URL --query Parameters[0].Value | sed 's/"//g')
+export EMAIL_ADMIN_AUTH=$(aws ssm get-parameters --region ap-northeast-2 --names EMAIL_ADMIN_AUTH --query Parameters[0].Value | sed 's/"//g')
+export EMAIL_ADMIN_SENDERINFO=$(aws ssm get-parameters --region ap-northeast-2 --names EMAIL_ADMIN_SENDERINFO --query Parameters[0].Value | sed 's/"//g')
 
 authbind --deep pm2 start dist/main.js
