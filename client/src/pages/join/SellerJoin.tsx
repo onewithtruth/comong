@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { postUsers } from '../../apis/api/users';
-import ButtonBasic from '../../components/common/ButtonBasic';
+import ButtonBasic from '../../components/common/button/ButtonBasic';
 import Modal from '../../components/common/modal/Modal';
 import SellerJoinModalContent from '../../components/common/modal/SellerJoinModalContent';
 import BasicInfo from '../../components/form/BasicInfo';
@@ -18,6 +18,7 @@ function SellerJoin() {
     address2: '',
     dob: '',
     role: 1,
+    likes: [],
   });
   const [message, setMessage] = useState('');
   const [showModal, setShowModal] = useState(false);
