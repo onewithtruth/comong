@@ -33,7 +33,6 @@ async function bootstrap() {
 		transform: true,
 		disableErrorMessages: false,
 	};
-
 	const cspOptions = {
 		directives: {
 			// 기본 옵션 설정
