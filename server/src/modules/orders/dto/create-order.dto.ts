@@ -20,7 +20,7 @@ export class CreateOrderDto {
 	readonly total_amount: number;
 
 	@ApiProperty({
-		enum: ['paid', 'pending'],
+		enum: ['paid', 'pending', 'canceled'],
 		example: 'pending',
 		description: 'status',
 		required: true,
@@ -49,6 +49,7 @@ export class CreateOrderDto {
 
 	@ApiProperty({
 		enum: [
+			'pending',
 			'delivered',
 			'processing',
 			'paymentdue',
@@ -57,7 +58,7 @@ export class CreateOrderDto {
 			'pick-up available',
 			'intransit',
 		],
-		example: 'delivered',
+		example: 'pending',
 		description: 'shipping_status',
 		required: true,
 	})
