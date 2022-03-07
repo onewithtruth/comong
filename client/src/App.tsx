@@ -3,7 +3,6 @@ import GlobalStyles from './GlobalStyles';
 import { Socket, io } from 'socket.io-client';
 import { config } from './config/config';
 
-
 const env = 'development';
 const { url } = config[env];
 
