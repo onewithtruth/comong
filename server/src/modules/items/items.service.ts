@@ -435,4 +435,8 @@ export class ItemsService {
 	remove(id: number) {
 		return `This action removes a #${id} item`;
 	}
+
+	inferCategory(title) {
+		return title.split(' ')
+	}
 }

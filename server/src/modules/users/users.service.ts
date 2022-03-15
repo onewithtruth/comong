@@ -223,8 +223,6 @@ export class UsersService {
 							},
 							{
 								where: { id: userInfoFromToken.id },
-							},
-							{
 								transaction: transaction,
 							},
 						)
@@ -283,8 +281,8 @@ export class UsersService {
 								where: {
 									user_id: userInfoFromToken.id,
 								},
+								transaction: transaction
 							},
-							{ transaction: transaction },
 						)
 						.then((insertedAddress) => {
 							resolve(insertedAddress);

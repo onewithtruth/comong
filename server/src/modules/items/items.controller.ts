@@ -251,4 +251,9 @@ export class ItemsController {
     return this.itemsService.getSellingItems()
   }
 
+  @Get('/category-inferred')
+  inferCategory(@Query('title') title: string) {
+    return this.itemsService.inferCategory(title)
+  }
+
 }
