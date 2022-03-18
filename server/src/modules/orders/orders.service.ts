@@ -306,10 +306,6 @@ export class OrdersService {
 										as: 'user',
 										attributes: ['id', 'storename', 'mobile'],
 									},
-									{
-										model: models.item_review,
-										as: 'item_reviews'
-									},
 								],
 								where: {
 									id: orderJointableList[j].order_detail_id,

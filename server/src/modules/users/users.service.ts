@@ -10,7 +10,6 @@ require('dotenv').config;
 import { SignInUserDto } from './dto/signin-user.dto';
 const models = require('../../models/index');
 import { TokenService } from 'src/util/token';
-import { MailerService } from '../mailer/mailer.service';
 import { v4 as uuid } from 'uuid';
 import { UpdateNotificationDto } from './dto/update.notification.dto';
 import { DeleteNotificationDto } from './dto/delete-notification.dto';
@@ -20,28 +19,24 @@ export type User = any;
 
 @Injectable()
 export class UsersService {
-	constructor(
-		private readonly tokenService: TokenService,
-		private readonly mailerService: MailerService,
-		) {}
+	constructor(private readonly tokenService: TokenService) {}
 
 	async create(info: any) {
 		//console.log(info)
 		const { user, address, likes } = info; //파이프라인을 통해 입력값을 { user: ~~, address: ~~, likes: ~~ } 형태로 변형
 		//console.log(user.likes.replace(/\[|\]/g, '').split(','))
-		const [newUser, isCreated]: [any, boolean] =
+		const [newUser, isCreated]: [{ id: number }, boolean] =
 			await models.user.findOrCreate({
 				where: { email: user.email },
 				defaults: {
 					...user,
 				},
 			});
-		console.log(isCreated)
+
 		//계정이 생성되었을 경우에만 관심 카테고리, 주소 테이블에 데이터 등록 진행
 		if (isCreated) {
 			//관심 카테고리 등록
 			const workArr = [];
-			await this.mailerService.send(newUser.role, [newUser.email], '가입 확인 메일', 'signup.ejs', newUser)
 			if (likes && Object.keys(likes).length > 0) {
 				//console.log(user.likes, '라잌스')
 				const likesArr = likes.replace(/\[|\]/g, '').split(','); // like의 형태는 ['1', '2']와 같은 배열 형태의 문자열임
@@ -223,6 +218,8 @@ export class UsersService {
 							},
 							{
 								where: { id: userInfoFromToken.id },
+							},
+							{
 								transaction: transaction,
 							},
 						)
@@ -279,10 +276,10 @@ export class UsersService {
 							},
 							{
 								where: {
-									user_id: userInfoFromToken.id,
+									user_id: userInfoFromToken,
 								},
-								transaction: transaction
 							},
+							{ transaction: transaction },
 						)
 						.then((insertedAddress) => {
 							resolve(insertedAddress);
@@ -397,26 +394,6 @@ export class UsersService {
 			return { message: 'successful' };
 		} else {
 			throw new BadRequestException('invalid value for property');
-		}
-	}
-
-	async getUser(user: User){
-		const info = await models.user.findOne({
-			where: {
-				id: user.id
-			},
-			attributes: {
-				exclude: ['password']
-			},
-			include: [
-				{ model: models.category_has_user, as: 'category_has_users' , attributes: [ 'category_id'] },
-				{ model: models.bookmark, as: 'bookmarks', where: {ismarked: 1} ,attributes: ['item_id'], required: false},
-			], 
-		})
-		if(info){
-			return { message: 'successful', user: info };
-		} else {
-			throw new BadRequestException('invalid value for property')
 		}
 	}
 }
